@@ -84,9 +84,10 @@ public class CartService {
 			cart = cartRepository.save(cart);
 		}
 
-		// Cart can only contain items from one restaurant
-		if (!cart.getRestaurantId().equals(restaurantId)) {
-
+		// If cart is currently empty, associate it with the new restaurant; otherwise ensure same restaurant
+		if (cart.getItems() == null || cart.getItems().isEmpty()) {
+			cart.setRestaurantId(restaurantId);
+		} else if (!cart.getRestaurantId().equals(restaurantId)) {
 			throw new RuntimeException("Cart can contain items from only one restaurant");
 		}
 

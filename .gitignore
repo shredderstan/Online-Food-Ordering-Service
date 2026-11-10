@@ -64,3 +64,8 @@ application-local.yml
 
 # Spring generated files
 spring-shell.log
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/

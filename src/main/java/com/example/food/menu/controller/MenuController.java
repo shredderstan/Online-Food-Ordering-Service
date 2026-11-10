@@ -38,9 +38,9 @@ public class MenuController {
 	}
 	
 	@PreAuthorize("hasRole('ADMIN') or (hasRole('RESTAURANT_OWNER') and @menuSecurity.isOwner(authentication, #id))")
-	@GetMapping("/menus/{id}")
-	public ResponseEntity<?> getMenuById(@PathVariable Long menuId) {
-		return ResponseEntity.ok(menuService.getMenuById(menuId));
+	@GetMapping("/api/menus/{id}")
+	public ResponseEntity<?> getMenuById(@PathVariable Long id) {
+		return ResponseEntity.ok(menuService.getMenuById(id));
 	}
 	
 	@PutMapping("/api/menus/{id}")
@@ -49,7 +49,7 @@ public class MenuController {
 	}
 	
 	@PreAuthorize("hasRole('ADMIN') or (hasRole('RESTAURANT_OWNER') and @menuSecurity.isOwner(authentication, #id))")
-	@DeleteMapping("/api//menus/{id}")
+	@DeleteMapping("/api/menus/{id}")
 	public ResponseEntity<?> deleteMenu(@PathVariable Long id) {
 		menuService.deleteMenu(id);
 		return ResponseEntity.noContent().build();

@@ -23,6 +23,31 @@ public class GlobalExceptionHandler{
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}
+
+	@ExceptionHandler(IllegalStateException.class)
+	public ResponseEntity<?> handleIllegalState(IllegalStateException exception) {
+		ErrorResponse error = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+	}
+
+	@ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+	public ResponseEntity<?> handleAccessDenied(org.springframework.security.access.AccessDeniedException exception) {
+		ErrorResponse error = new ErrorResponse(LocalDateTime.now(), HttpStatus.FORBIDDEN.value(), "Access denied: " + exception.getMessage());
+
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+	}
+
+	@ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)
+	public ResponseEntity<?> handleValidationErrors(org.springframework.web.bind.MethodArgumentNotValidException exception) {
+		String errorMessage = exception.getBindingResult().getFieldErrors().stream()
+				.map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+				.findFirst()
+				.orElse("Validation failed");
+		ErrorResponse error = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), errorMessage);
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+	}
 	
 	
 }
